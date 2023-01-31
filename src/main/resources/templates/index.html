@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="/main.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
     <title>Document</title>
 </head>
 
@@ -20,9 +20,11 @@
             <br>
             <br>
             <section id="cta">
-                <form><input type="text" id="name" placeholder="닉네임을 입력하시오"></form>
-                <br>
-                <a onclick="query()" class="button alt">검색하기</a>
+                <form id="query" action="/member/query" method="GET" novalidate>
+                    <input type="text" id="name" name="name" placeholder="닉네임을 입력하시오">
+                    <br>
+                </form>
+                <button value="검색" onclick="query()" class="button alt">검색</button>
             </section>
         </section>
     </header>
@@ -32,31 +34,16 @@
 <script>
     function query() {
         var name = $("#name").val();
-        // var mmbrId = $("#memberEntry01_01").val();
         var jsonData = {
             "name": name,
         }
         if (name == "") {
             alert(" 닉네임을 입력해주세요 ");
+        } else {
+            console.log(" 왜 되지 ? ");
+            document.getElementById("query").submit();
         }
         console.log(name);
-
-        $.ajax({
-            type: 'GET',
-            url: 'member/query',
-            dataType: 'text',
-            data: jsonData,
-            success: function (data) {
-                if (data = "query") {
-                    window.location.href = 'member/queryhome';
-                } else {
-                    alert(" 없는 닉네임 입니다. ");
-                }
-            }, error: function () {
-                alert(" 없는 닉네임 입니다. ");
-            }
-            ,
-        });
     }
 </script>
 

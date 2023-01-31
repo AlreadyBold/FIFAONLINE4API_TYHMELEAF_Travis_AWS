@@ -5,16 +5,84 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <title>Document</title>
 </head>
 
 <body>
+    <header id="header" style="margin-bottom: 0;">
+        <h1>FIFA ONLINE 4 USER INFO</h1>
+        <nav id="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li>
+                    <a href="#" class="icon solid fa-angle-down">Detail Menu</a>
+                    <ul>
+                        <li><a href="generic.html">Generic</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="elements.html">Elements</a></li>
+                        <li>
+                            <a href="#">Submenu</a>
+                            <ul>
+                                <li><a href="#">Option One</a></li>
+                                <li><a href="#">Option Two</a></li>
+                                <li><a href="#">Option Three</a></li>
+                                <li><a href="#">Option Four</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#" class="button">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section id="main" class="container">
+        <header>
+            <br>
+            <h2><span th:text="${session.nickname}"></span></h2>
+            <p> 감독님 </p>
+        </header>
+    </section>
+
+    <!-- Table -->
+    <section class="box" style="margin-right: 200px; margin-left: 200px;">
+        <h3>UserInfo</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>USER-NICK-NAME : </td>
+                        <td><span th:text="${session.nickname}"></span></td>
+                    </tr>
+                    <tr>
+                        <td>USER-LEVEL :</td>
+                        <td><span th:text="${session.level}"></span></td>
+                    </tr>
+                    <tr th:each="info : ${matchInfo}">
+                        <td><span th:text="${info.matchType}"></span> 최고 등급 : </td>
+                        <td><span th:text="${info.grade}"></span></td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    </div>
+    </div>
     <!--<p> name is</p><p th:text="${student.id}"></p>-->
-    <h1> API 호출 성공 </h1>
-    <h2> USER-NICK-NAME : <span th:text="${session.nickname}"></span></h2>
-    <h2> USER-LEVEL : <span th:text="${session.level}"></span></h2>
-    <h2> <span th:text="${session.matchtype0k}"></span>최고 등급 : <span th:text="${session.division0k}"></span></h2>
-    <h2> <span th:text="${session.matchtype1k}"></span>최고 등급 : <span th:text="${session.division1k}"></span></h2>
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.dropotron.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
 
 </html>
