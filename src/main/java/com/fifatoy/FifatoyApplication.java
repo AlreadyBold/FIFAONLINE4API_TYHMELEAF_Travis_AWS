@@ -1,4 +1,4 @@
-package com.example.fifatoy;
+package com.fifatoy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +9,5 @@ public class FifatoyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FifatoyApplication.class, args);
 	}
-	
 
 }

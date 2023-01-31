@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,48 +9,50 @@
     <link rel="stylesheet" href="/main.css" />
     <title>Document</title>
 </head>
+
 <body>
     <header id="header" class="alt">
         <section id="banner" style="height:100%;">
             <h1>FIFA ONLINE 4 USER INFO</h1>
             <h2>FIFA ONLINE 4 USER INFO SEARCH</h2>
-					<p>NEXON - FIFA ONLINE 4</p>
-                    <br>
-                    <br>
-                    <br>
+            <p>NEXON - FIFA ONLINE 4</p>
+            <br>
+            <br>
+            <br>
             <section id="cta">
-                <form><input type="text" id="name" placeholder="닉네임을 입력하시오"></form> 
+                <form><input type="text" id="name" placeholder="닉네임을 입력하시오"></form>
                 <br>
                 <a onclick="query()" class="button alt">검색하기</a>
             </section>
         </section>
     </header>
 
-    
+
 </body>
 <script>
-    function query (){
+    function query() {
         var name = $("#name").val();
         // var mmbrId = $("#memberEntry01_01").val();
         var jsonData = {
-            "name" : name,
+            "name": name,
         }
-    if( name == "" ){
-        alert(" 닉네임을 입력해주세요 ");
-    }
-    console.log(name);
+        if (name == "") {
+            alert(" 닉네임을 입력해주세요 ");
+        }
+        console.log(name);
 
-    $.ajax({
-        type: 'GET',
-        url: '/member/query',
-        dataType: 'text',
-        data: jsonData,
-        success: function (data) {
-            if( data = "query") {
-            window.location.href = 'member/queryhome';
-            }
-        },
-    });
-  }
+        $.ajax({
+            type: 'GET',
+            url: 'member/query',
+            dataType: 'text',
+            data: jsonData,
+            success: function (data) {
+                if (data = "query") {
+                    window.location.href = 'member/queryhome';
+                }
+            },
+        });
+    }
 </script>
+
 </html>
