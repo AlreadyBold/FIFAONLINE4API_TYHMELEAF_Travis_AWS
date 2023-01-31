@@ -49,8 +49,13 @@
             success: function (data) {
                 if (data = "query") {
                     window.location.href = 'member/queryhome';
+                } else {
+                    alert(" 없는 닉네임 입니다. ");
                 }
-            },
+            }, error: function () {
+                alert(" 없는 닉네임 입니다. ");
+            }
+            ,
         });
     }
 </script>
