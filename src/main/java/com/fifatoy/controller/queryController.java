@@ -68,6 +68,7 @@ public class queryController {
                     break;
                 }
             }
+            userInfo.put("matchTypeCd", String.valueOf(matchTypeMap.get(i).get("matchtype")));
             matchInfo.add(userInfo);
         }
         model.addAttribute("matchInfo", matchInfo);

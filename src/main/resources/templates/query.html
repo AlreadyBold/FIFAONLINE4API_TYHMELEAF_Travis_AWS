@@ -18,7 +18,14 @@
                 <li>
                     <a href="#" class="icon solid fa-angle-down">Detail Menu</a>
                     <ul>
-                        <li><a href="#">Current Match</a></li>
+                        <li><a href="#">Current Match</a>
+                            <ul>
+                                <li th:each="info : ${matchInfo}" th:attr="data-value=${info.matchType}">
+                                    <a th:href="@{|/matchInfo/${info.matchTypeCd}|}" class='close'
+                                        aria-hidden='true'><span th:text="${info.matchType}" th:remove="tag"></span></a>
+                                </li>
+                            </ul>
+                        </li>
                         <li><a href="#">Current Trade</a>
                             <ul>
                                 <li><a th:href="@{/Trade/buyInfo}">BUY </a></li>
