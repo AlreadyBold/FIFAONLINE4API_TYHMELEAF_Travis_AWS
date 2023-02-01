@@ -44,12 +44,14 @@ public class queryController {
         // 세션에 유저정보 담기
         session.setAttribute("nickname", String.valueOf(userinfo.get("nickname")));
         session.setAttribute("level", String.valueOf(userinfo.get("level")));
+        session.setAttribute("accessId", String.valueOf(userinfo.get("accessId")));
         String accessId = String.valueOf(userinfo.get("accessId"));
 
         // 회원정보로 최고등급 조회
         url = "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId + "/maxdivision";
         ArrayList<Map<String, Object>> resultListMap = new ArrayList<Map<String, Object>>();
         resultListMap = (ArrayList<Map<String, Object>>) apicallutil.UseKeyArray(url, apiKey);
+
         // 모델에 삽입
         ArrayList<Map<String, Object>> matchInfo = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < resultListMap.size(); i++) {

@@ -10,6 +10,9 @@
 </head>
 
 <body>
+    <!-- 
+        구현해야할 기능 목록 : 페이징 / 항목별 오름차순, 내림차순
+    -->
     <header id="header" style="margin-bottom: 0;">
         <h1>FIFA ONLINE 4 USER INFO</h1>
         <nav id="nav">
@@ -41,26 +44,25 @@
 
     <!-- Table -->
     <section class="box" style="margin-right: 200px; margin-left: 200px;">
-        <h4>USER - INFO</h4>
+        <h4><span th:text="${session.WHY}"></span> - INFO</h4>
         <div class="table-wrapper">
-            <table>
+            <table class="alt">
                 <thead>
                     <tr>
+                        <th>SEASON</th>
+                        <th>NAME</th>
+                        <th>GRADE</th>
+                        <th>PRICE</th>
+                        <th>DATE</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>USER-NICK-NAME : </td>
-                        <td><span th:text="${session.nickname}"></span></td>
-                    </tr>
-                    <tr>
-                        <td>USER-LEVEL :</td>
-                        <td><span th:text="${session.level}"></span></td>
-                    </tr>
-                    <tr th:each="info : ${matchInfo}">
-                        <td><span th:text="${info.matchType}"></span> 최고 등급 : </td>
-                        <td><span th:text="${info.grade}"></span></td>
-                        </td>
+                    <tr th:each="info : ${BuyInfo}">
+                        <td><span th:text="${info.className}"></span></td>
+                        <td><span th:text="${info.name}"></span></td>
+                        <td><span th:text="${info.grade}"></span> 강</td>
+                        <td><span th:text="${info.value}"></span> BP</td>
+                        <td><span th:text="${info.tradeDate}"></td>
                     </tr>
                 </tbody>
             </table>
