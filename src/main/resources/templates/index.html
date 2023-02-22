@@ -6,23 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="../assets/css/main.css" />
     <title>Document</title>
 </head>
 
 <body>
     <!-- 
-        최종 웹 구조 
+        최종 웹 구조
         1. 회원가입 ( 메일인증, 구단주명 등록 )
-        
+            -1) 회원가입 시 구단주명 중복일 경우 아이디/비밀번호찾기 
         2. 로그인
-        
         3. 자신의 기본정보, 이적시장정보, 매치정보 조회
-            -1) 이적시장 정보 자세히보기 클릭시 팝업창으로 이미지보여주기
-
+            -1) 이적시장 정보 선수이름 클릭시 팝업창으로 이미지보여주기
+            -2) 페이징 
         4. 친구추가 기능
             -1) 쪽지 날리기 
-
         5. 친구의 기본정보, 이적시장정보, 매치정보 조회 
     -->
     <header id="header" class="alt">
@@ -42,8 +40,6 @@
             </section>
         </section>
     </header>
-
-
 </body>
 <script>
     function query() {

@@ -18,11 +18,24 @@ public class APICALLUTIL {
     DecimalFormat df = new DecimalFormat("###,###");
 
     /**
+     * API키가 필요하지 않은 API 요청, 반환 데이터가 JSONObject 형식인 경우 ( API 주소 url )
+     * 
+     * @date : 2023-01-30
+     */
+    public Map<String, Object> NotKeyObject(String url) {
+        HttpHeaders headers = new HttpHeaders();
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<?> tokenRequest = new HttpEntity<>(headers);
+        ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.GET, tokenRequest, JSONObject.class);
+        return (Map<String, Object>) response.getBody();
+    }
+
+    /**
      * API키가 필요하지 않은 API 요청, 반환 데이터가 JSONArray 형식인 경우 ( API 주소 url )
      * 
      * @date : 2023-01-30
      */
-    public ArrayList<Map<String, Object>> NotKey(String url) {
+    public ArrayList<Map<String, Object>> NotKeyArray(String url) {
         HttpHeaders headers = new HttpHeaders();
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<?> tokenRequest = new HttpEntity<>(headers);
@@ -81,12 +94,12 @@ public class APICALLUTIL {
         // 시즌 정보 불러오기
         url = "https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json";
         ArrayList<Map<String, Object>> seasonInfoMap = new ArrayList<Map<String, Object>>();
-        seasonInfoMap = (ArrayList<Map<String, Object>>) apicallutil.NotKey(url);
+        seasonInfoMap = (ArrayList<Map<String, Object>>) apicallutil.NotKeyArray(url);
 
         // 선수 정보 불러오기
         url = "https://static.api.nexon.co.kr/fifaonline4/latest/spid.json";
         ArrayList<Map<String, Object>> spidMap = new ArrayList<Map<String, Object>>();
-        spidMap = (ArrayList<Map<String, Object>>) apicallutil.NotKey(url);
+        spidMap = (ArrayList<Map<String, Object>>) apicallutil.NotKeyArray(url);
 
         ArrayList<Map<String, Object>> TradeInfo = new ArrayList<Map<String, Object>>();
         for (int i = 0; i < tradeInfoMap.size(); i++) {

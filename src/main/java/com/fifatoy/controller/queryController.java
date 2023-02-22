@@ -29,12 +29,12 @@ public class queryController {
         // 공식경기 등급 가져오기 API 호출 하여 맵에 저장
         String url = "https://static.api.nexon.co.kr/fifaonline4/latest/division.json";
         ArrayList<Map<String, Object>> divisionMap = new ArrayList<Map<String, Object>>();
-        divisionMap = (ArrayList<Map<String, Object>>) apicallutil.NotKey(url);
+        divisionMap = (ArrayList<Map<String, Object>>) apicallutil.NotKeyArray(url);
 
         // 매치타입 가져오기 API 호출 하여 맵에 저장
         url = "https://static.api.nexon.co.kr/fifaonline4/latest/matchtype.json";
         ArrayList<Map<String, Object>> matchTypeMap = new ArrayList<Map<String, Object>>();
-        matchTypeMap = (ArrayList<Map<String, Object>>) apicallutil.NotKey(url);
+        matchTypeMap = (ArrayList<Map<String, Object>>) apicallutil.NotKeyArray(url);
 
         // 닉네임으로 회원정보 조회
         url = "https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=" + name + "";
