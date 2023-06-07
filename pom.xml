@@ -61,20 +61,20 @@
 			<version>5.3.19</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>OracleDriver</artifactId>
             <version>12.1.0.2.0</version>
             <scope>system</scope>
 			<systemPath>C:\vstoy\src\main\resources\static\lib\ojdbc7-12.1.0.2.jar</systemPath>
-        </dependency>
-		<!--
+        </dependency>-->
+		
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
 			<version>21.5.0.0</version>
 		</dependency>
-		-->
+		
 
 		<dependency>
 			<groupId>com.oracle.database.security</groupId>

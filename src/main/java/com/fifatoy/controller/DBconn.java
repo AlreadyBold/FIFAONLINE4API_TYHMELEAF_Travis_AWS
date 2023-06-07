@@ -9,10 +9,9 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 public class DBconn {
 
+    @Value("${spring.datasource.driver-class-name}")
+    static String driver;
     /*
-     * @Value("${spring.datasource.driver-class-name}")
-     * private static String driver;
-     * 
      * @Value("${spring.datasource.username}")
      * private static String username;
      * 
@@ -23,7 +22,11 @@ public class DBconn {
     public static void main(String[] args) {
         GenericXmlApplicationContext ctx = new GenericXmlApplicationContext();
         ConfigurableEnvironment env = ctx.getEnvironment();
-        String driver = env.getProperty("spring.datasource.driver-class-name"); // "oracle.jdbc.OracleDriver";
+
+        // String driver = env.getProperty("spring.datasource.driver-class-name"); //
+        // "oracle.jdbc.OracleDriver";
+        // @Value("${spring.datasource.driver-class-name}")
+        // private String driver;
         String url = env.getProperty("spring.datasource.url");// "jdbc:oracle:thin:@ZY0AG10DCLGRPHWU_high?TNS_ADMIN=/Users/user/Downloads/OCIWallet";
         String username = env.getProperty("spring.datasource.username"); // "admin";
         String password = env.getProperty("spring.datasource.password"); // "Dlwnsgud!1@2";
@@ -33,16 +36,23 @@ public class DBconn {
         System.out.println("username = " + username);
         System.out.println("password = " + password);
 
+        driver = "oracle.jdbc.OracleDriver";
+        username = "ADMIN";
+        password = "Dlwnsgud!1@2";
+
+        url = "jdbc:oracle:thin:@ZY0AG10DCLGRPHWU_high?TNS_ADMIN=C:/Users/user/Downloads/OCIWallet";
+
         try {
             // driver 로딩
             Class.forName(driver);
             System.out.println("jdbc driver 로딩 성공");
             // DB와 연결
-            DriverManager.getConnection(driver, username, password);
+            DriverManager.getConnection(url, username, password);
             System.out.println("오라클 연결 성공");
         } catch (ClassNotFoundException e) {
             System.out.println("jdbc driver 로딩 실패");
         } catch (SQLException e) {
+            e.printStackTrace();
             System.out.println("오라클 연결 실패");
         }
 

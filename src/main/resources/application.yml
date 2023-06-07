@@ -1,0 +1,18 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+  datasource:
+    driver-class-name: oracle.jdbc.OracleDriver
+    url: jdbc:oracle:thin:@ZY0AG10DCLGRPHWU_high?TNS_ADMIN=/Users/user/Downloads/OCIWallet
+    username: admin
+    password: Dlwnsgud!1@2
+
+hikari:
+  connection-timeout: 3000
+  validation-timeout: 3000
+  minimum-idle: 5
+  maximum-pool-size: 20
+  idle-timeout: 200000
+  max-lifetime: 240000
+  pool-name: oraPool
