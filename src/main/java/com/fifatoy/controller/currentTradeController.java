@@ -27,6 +27,7 @@ public class currentTradeController {
         String type = "buy";
         model.addAttribute("BuyInfo", apicallutil.tradeInfo(accessId, type, apiKey));
         session.setAttribute("WHY", "BUY");
+
         return "currentTradeinfo";
     }
 

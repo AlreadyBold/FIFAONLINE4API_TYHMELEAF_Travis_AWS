@@ -34,12 +34,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- mybatis -->
-		<dependency>
-			<groupId>org.mybatis.spring.boot</groupId>
-			<artifactId>mybatis-spring-boot-starter</artifactId>
-			<version>2.3.0</version>
-		</dependency>
 		<!-- lombok -->
 		<dependency>
             <groupId>org.projectlombok</groupId>
@@ -61,13 +55,6 @@
 			<version>5.3.19</version>
 		</dependency>
 
-		<!--<dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>OracleDriver</artifactId>
-            <version>12.1.0.2.0</version>
-            <scope>system</scope>
-			<systemPath>C:\vstoy\src\main\resources\static\lib\ojdbc7-12.1.0.2.jar</systemPath>
-        </dependency>-->
 		
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
@@ -92,6 +79,17 @@
 			<groupId>com.oracle.database.security</groupId>
 			<artifactId>osdt_core</artifactId>
 			<version>21.5.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-hikaricp</artifactId>
+			<version>5.4.10.Final</version>
 		</dependency>
 
 
