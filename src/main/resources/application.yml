@@ -7,6 +7,10 @@ spring:
     url: jdbc:oracle:thin:@ZY0AG10DCLGRPHWU_high?TNS_ADMIN=/Users/user/Downloads/OCIWallet
     username: admin
     password: Dlwnsgud!1@2
+  jpa:
+    database: oracle
+    database-platform: oracle.jdbc.OracleDriver
+    show-sql: true
 
 hikari:
   connection-timeout: 3000
