@@ -32,8 +32,11 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/member")
 public class queryController {
 
+    // API KEY 값
     @Value("${NexonApiKey}")
     private String apiKey;
+
+    // UTIL
     APICALLUTIL apicallutil = new APICALLUTIL();
 
     /*
@@ -51,6 +54,7 @@ public class queryController {
      * @Autowired
      * private deleteUserService deleteuserservice;
      */
+
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/query")
