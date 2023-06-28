@@ -2,3 +2,19 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jpabegin?characterEncoding=utf8
+    username: root
+    password: 1234
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    database: mysql
+    open-in-view: false
+
+logging:
+  level:
+    org:
+      hibernate:
+        sql: DEBUG

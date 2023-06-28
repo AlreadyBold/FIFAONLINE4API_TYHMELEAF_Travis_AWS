@@ -13,7 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fifatoy.util.APICALLUTIL;
+import com.fifatoy.exception.NoUserException;
+import com.fifatoy.repository.User;
+import com.fifatoy.service.getUserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +31,10 @@ public class queryController {
     private String apiKey;
     APICALLUTIL apicallutil = new APICALLUTIL();
 
+    @Autowired
+    private getUserService getUserService;
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
     /*
      * @Autowired
      * private jpaloginrepo jpaloginrep;
@@ -32,6 +42,15 @@ public class queryController {
 
     @GetMapping("/query")
     public String query(HttpSession session, Model model, @RequestParam(value = "name", required = false) String name) {
+
+        String email = "aaa@aaa.com";
+        try {
+            User user = getUserService.getUser(email);
+            logger.info("사용자 정보: {}, {}", user.getEmail(), user.getName());
+            System.out.println(user);
+        } catch (NoUserException e) {
+            logger.info("사용자가 존재하지 않음: {}", email);
+        }
 
         // 공식경기 등급 가져오기 API 호출 하여 맵에 저장
         String url = "https://static.api.nexon.co.kr/fifaonline4/latest/division.json";
