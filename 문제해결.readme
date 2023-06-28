@@ -1,0 +1,8 @@
+
+UnsatisfiedDependencyException: Error creating bean with name
+그냥 project clean 하니까 되더라 ...
+Bean주입이 잘 되고 있는 지 오타는 없는 지 Annotation 확인을 하면 좋을 것으로 보임 
+
+Cannot invoke "repository.메소드명()" because "this.repository" is null
+생성자 주입이 되지 않는 경우가 대부분 인듯 ? 
+service 에 @RequiredArgsConstructor 를 넣어주고 repositary class 선언 할 때 접근자를 final 로 선언해야함 ( final 로 선언해야 Lombok이 작동한단다 ;; ) 
