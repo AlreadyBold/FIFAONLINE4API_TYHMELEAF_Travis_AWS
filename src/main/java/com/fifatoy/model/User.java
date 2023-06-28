@@ -1,4 +1,4 @@
-package com.fifatoy.repository;
+package com.fifatoy.model;
 
 import java.time.LocalDateTime;
 

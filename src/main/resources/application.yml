@@ -4,7 +4,7 @@ spring:
     suffix: .html
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/jpabegin?characterEncoding=utf8
+    url: jdbc:mysql://localhost/jpabegin?characterEncoding=utf8
     username: root
     password: 1234
     hikari:

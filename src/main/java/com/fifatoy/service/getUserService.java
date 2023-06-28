@@ -5,8 +5,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.fifatoy.exception.NoUserException;
-import com.fifatoy.repository.User;
-import com.fifatoy.repository.getUserRepository;
+import com.fifatoy.model.User;
+import com.fifatoy.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class getUserService {
 
     // JPA REPOSITORY FINAL 필수 .. . .
-    final getUserRepository getuserrepository;
+    final UserRepository getuserrepository;
 
     public User getUser(String email) {
         Optional<User> userOpt = getuserrepository.findById(email);
