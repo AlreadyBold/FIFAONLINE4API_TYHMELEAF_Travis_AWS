@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.fifatoy.model.UserInfo;
-import com.fifatoy.repository.jpaloginrepo;
-import com.fifatoy.service.jpaloginservice;
 import com.fifatoy.util.APICALLUTIL;
 
 import jakarta.servlet.http.HttpSession;
@@ -28,9 +25,6 @@ public class queryController {
     private String apiKey;
     APICALLUTIL apicallutil = new APICALLUTIL();
 
-    @Autowired
-    private jpaloginservice jpaloginserv;
-
     /*
      * @Autowired
      * private jpaloginrepo jpaloginrep;
@@ -38,9 +32,6 @@ public class queryController {
 
     @GetMapping("/query")
     public String query(HttpSession session, Model model, @RequestParam(value = "name", required = false) String name) {
-
-        List<UserInfo> testjpa = jpaloginserv.findByUserId("admin", "1234");
-        System.out.println(testjpa.toString());
 
         // 공식경기 등급 가져오기 API 호출 하여 맵에 저장
         String url = "https://static.api.nexon.co.kr/fifaonline4/latest/division.json";

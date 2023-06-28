@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.text.DecimalFormat;
 import com.fifatoy.util.APICALLUTIL;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,8 @@ public class currentTradeController {
     // 유틸
     APICALLUTIL apicallutil = new APICALLUTIL();
 
+    DecimalFormat df = new DecimalFormat("###,###");
+
     // 구매목록 조회
     @GetMapping("/buyInfo")
     public String buyInfo(HttpSession session, Model model) {
@@ -27,7 +30,6 @@ public class currentTradeController {
         String type = "buy";
         model.addAttribute("BuyInfo", apicallutil.tradeInfo(accessId, type, apiKey));
         session.setAttribute("WHY", "BUY");
-
         return "currentTradeinfo";
     }
 
