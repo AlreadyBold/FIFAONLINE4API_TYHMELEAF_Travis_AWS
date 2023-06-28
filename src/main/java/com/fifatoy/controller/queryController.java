@@ -21,8 +21,10 @@ import com.fifatoy.exception.DupException;
 import com.fifatoy.exception.NoUserException;
 import com.fifatoy.model.SaveRequest;
 import com.fifatoy.model.User;
+import com.fifatoy.service.deleteUserService;
 import com.fifatoy.service.getUserService;
 import com.fifatoy.service.newUserService;
+import com.fifatoy.service.updateUserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -34,12 +36,21 @@ public class queryController {
     private String apiKey;
     APICALLUTIL apicallutil = new APICALLUTIL();
 
-    @Autowired
-    private getUserService getUserService;
-
-    @Autowired
-    private newUserService newUserService;
-
+    /*
+     * JPA SERVICE
+     * 
+     * @Autowired
+     * private getUserService getUserService;
+     * 
+     * @Autowired
+     * private newUserService newUserService;
+     * 
+     * @Autowired
+     * private updateUserService updateuserservice;
+     * 
+     * @Autowired
+     * private deleteUserService deleteuserservice;
+     */
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/query")
@@ -104,14 +115,33 @@ public class queryController {
          * } catch (DupException e) {
          * logger.info("사용자가 이미 존재함: {}", request.getEmail());
          * }
-         */
-
-        /*
+         * 
          * JPA TEST CODE ( READ )
          * String email = "aaa@aaa.com";
          * try {
          * User user = getUserService.getUser(email);
          * logger.info("사용자 정보: {}, {}", user.getEmail(), user.getName());
+         * } catch (NoUserException e) {
+         * logger.info("사용자가 존재하지 않음: {}", email);
+         * }
+         * 
+         * JPA TEST CODE ( UPDATE )
+         * String[] v = new String[2];
+         * v[0] = accessId;
+         * v[1] = name;
+         * SaveRequest request = new SaveRequest(v[0], v[1]);
+         * try {
+         * updateuserservice.updateUser(request);
+         * logger.info("사용자 수정 : {}", request.getEmail());
+         * } catch (DupException e) {
+         * logger.info("사용자 없음 : {}", request.getEmail());
+         * }
+         * 
+         * JPA TEST CODE ( DELETE )
+         * String email = "aaa@aaa.com";
+         * try {
+         * deleteuserservice.deleteUser(email);
+         * logger.info("사용자 삭제됨 ");
          * } catch (NoUserException e) {
          * logger.info("사용자가 존재하지 않음: {}", email);
          * }

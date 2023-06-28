@@ -15,16 +15,19 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class newUserService {
+public class updateUserService {
 
     final UserRepository userrepository;
 
     @Transactional
-    public void saveUser(SaveRequest SaveRequest) {
+    public void updateUser(SaveRequest SaveRequest) {
         Optional<User> userOpt = userrepository.findById(SaveRequest.getEmail());
-        if (userOpt.isPresent())
+        if (userOpt.isPresent()) {
+            User newUser = new User(SaveRequest.getEmail(), "UPDATE", LocalDateTime.now());
+            userrepository.save(newUser);
+        } else {
             throw new DupException();
-        User newUser = new User(SaveRequest.getEmail(), SaveRequest.getName(), LocalDateTime.now());
-        userrepository.save(newUser);
+        }
+
     }
 }

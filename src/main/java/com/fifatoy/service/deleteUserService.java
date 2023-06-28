@@ -3,6 +3,7 @@ package com.fifatoy.service;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fifatoy.exception.NoUserException;
 import com.fifatoy.model.User;
@@ -12,13 +13,13 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class getUserService {
-
-    // JPA REPOSITORY FINAL 필수 .. . .
+public class deleteUserService {
     final UserRepository userrepository;
 
-    public User getUser(String email) {
+    @Transactional
+    public void deleteUser(String email) {
         Optional<User> userOpt = userrepository.findById(email);
-        return userOpt.orElseThrow(() -> new NoUserException());
+        User user = userOpt.orElseThrow(() -> new NoUserException());
+        userrepository.delete(user);
     }
 }
