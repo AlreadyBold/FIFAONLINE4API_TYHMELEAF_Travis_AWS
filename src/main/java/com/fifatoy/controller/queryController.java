@@ -48,21 +48,17 @@ public class queryController {
      * @Autowired
      * private newUserService newUserService;
      * 
-     * 
-     * 
+     * @Autowired
+     * private updateUserService updateuserservice;
      * 
      * @Autowired
      * private deleteUserService deleteuserservice;
      */
 
-    @Autowired
-    private updateUserService updateuserservice;
-
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/query")
-    public String query(HttpSession session, Model model, @RequestParam(value = "name", required = false) String name)
-            throws Exception {
+    public String query(HttpSession session, Model model, @RequestParam(value = "name", required = false) String name) {
 
         // 공식경기 등급 가져오기 API 호출 하여 맵에 저장
         String url = "https://static.api.nexon.co.kr/fifaonline4/latest/division.json";
@@ -112,17 +108,17 @@ public class queryController {
         model.addAttribute("matchInfo", matchInfo);
 
         /*
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
+         * JPA TEST CODE (CREATE)
+         * String[] v = new String[2];
+         * v[0] = accessId;
+         * v[1] = name;
+         * SaveRequest request = new SaveRequest(v[0], v[1]);
+         * try {
+         * newUserService.saveUser(request);
+         * logger.info("새 사용자 저장: {}", request.getEmail());
+         * } catch (DupException e) {
+         * logger.info("사용자가 이미 존재함: {}", request.getEmail());
+         * }
          * 
          * JPA TEST CODE ( READ )
          * String email = "aaa@aaa.com";
@@ -134,16 +130,16 @@ public class queryController {
          * }
          * 
          * JPA TEST CODE ( UPDATE )
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
-         * 
+         * String[] v = new String[2];
+         * v[0] = accessId;
+         * v[1] = name;
+         * SaveRequest request = new SaveRequest(v[0], v[1]);
+         * try {
+         * updateuserservice.updateUser(request);
+         * logger.info("기존 사용자 수정 : {}", request.getEmail());
+         * } catch (DupException e) {
+         * logger.info("사용자가 존재하지 않음 : {}", request.getEmail());
+         * }
          * 
          * JPA TEST CODE ( DELETE )
          * String email = "aaa@aaa.com";
@@ -154,16 +150,6 @@ public class queryController {
          * logger.info("사용자가 존재하지 않음: {}", email);
          * }
          */
-        String[] v = new String[2];
-        v[0] = accessId;
-        v[1] = name;
-        SaveRequest request = new SaveRequest(v[0], v[1]);
-        try {
-            updateuserservice.updateUser(request);
-            logger.info("기존 사용자 수정 : {}", request.getEmail());
-        } catch (DupException e) {
-            logger.info("사용자가 존재하지 않음 : {}", request.getEmail());
-        }
 
         return "query";
     }

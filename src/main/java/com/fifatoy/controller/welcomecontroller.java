@@ -11,4 +11,9 @@ public class welcomecontroller {
         return "/";
     }
 
+    @GetMapping("/join")
+    public String join() {
+        return "memberjoin";
+    }
+
 }

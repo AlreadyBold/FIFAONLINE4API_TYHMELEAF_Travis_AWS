@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <title>Document</title>
+</head>
+
+<body>
+    <header id="header" class="alt">
+        <section id="banner" style="height:40%;">
+            <h1>FIFA ONLINE 4 USER INFO</h1>
+            <h2>FIFA ONLINE 4 USER INFO 회원가입 </h2>
+            <p>NEXON - FIFA ONLINE 4</p>
+            <br>
+            <section id="cta">
+                <form id="join">
+                    <input type="text" id="id" name="id" placeholder="ID를 입력하시오" check_result="fail" required>
+                    <button type="button" id="id_overlap_button" class="button alt"
+                        onclick="id_overlap_check()">중복검사</button>
+                    <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력하시오" check_result="fail"
+                        required>
+                    <button type="button" id="nickname_overlap_button" class="button alt"
+                        onclick="nickname_overlap_check()">피파닉네임검사</button>
+                    <input type="password" id="pwd" name="pwd" placeholder="비밀번호를 입력하시오">
+                    <img id="nickname_check_success" style="display: none;">
+                    <img id="id_check_success" style="display: none;">
+                    <br>
+                </form>
+                <button value="join" onclick="join()" class="button alt">JOIN</button>
+            </section>
+        </section>
+    </header>
+
+
+</body>
+<script>
+    function id_overlap_check() {
+        $('#id').change(function () {
+            $('#id_check_success').hide();
+            $('#id_overlap_button').show();
+            $('#id').attr("check_result", "fail");
+        })
+
+        var id = $("#id").val();
+        if (id == null || id == "") {
+            alert(" 아이디를 입력해주세요 ");
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: "membership/idoverlaptest",
+                data: {
+                    'id': id
+                },
+                datatype: 'json',
+                success: function (result) {
+                    if (result == "SUCC") {
+                        alert("사용가능한 아이디입니다.");
+                        $('#id').attr("check_result", "success");
+                        $('#id_check_sucess').show();
+                        $('#id_overlap_button').hide();
+                        return;
+                    } else if (result == "FAIL") {
+                        alert("중복된 아이디입니다.");
+                        id_overlap_input.focus();
+                        return;
+                    }
+                }
+            }
+            )
+        }
+    }
+
+    function nickname_overlap_check() {
+        $('#nickname').change(function () {
+            $('#nickname_check_success').hide();
+            $('#nickname_overlap_button').show();
+            $('#nickname').attr("check_result", "fail");
+        })
+
+        var nickname = $("#nickname").val();
+        if (nickname == null || nickname == "") {
+            alert(" 닉네임을 입력해주세요 ");
+        } else {
+            $.ajax({
+                type: 'GET',
+                url: "/membership/nicknameoverlaptest",
+                data: {
+                    'nickname': nickname
+                },
+                datatype: 'text',
+                success: function (result) {
+                    if (result == "SUCC") {
+                        alert("등록가능한 닉네임입니다.");
+                        $('#nickname').attr("check_result", "success");
+                        $('#nickname_check_sucess').show();
+                        $('#nickname_overlap_button').hide();
+                        return;
+                    } else if (result == "FAIL") {
+                        alert("없는 닉네임입니다.");
+                        nickname_overlap_input.focus();
+                        return;
+                    }
+                }
+            }
+            )
+        }
+    }
+
+
+
+    function join() {
+        var id = $("#id").val();
+        var pwd = $("#pwd").val();
+        var nickname = $("#nickname").val();
+        if ($('.id').attr("check_result") == "fail") {
+            alert("아이디 중복체크를 해주시기 바랍니다.");
+            $('.id').focus();
+            return false;
+        } else if ($('.nickname').attr("check_result") == "fail") {
+            alert("피파온라인 닉네임검사를 해주시기 바랍니다.");
+            $('.nickname').focus();
+            return false;
+        } else if (pwd == "" || pwd == null) {
+            alert(" 비밀번호를 입력해주세요 ");
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: "/membership/join",
+                data: {
+                    'id': id,
+                    'nickname': nickname,
+                    'pwd': pwd
+                },
+                datatype: 'text',
+            }
+            )
+        }
+    }
+</script>
+
+</html>
