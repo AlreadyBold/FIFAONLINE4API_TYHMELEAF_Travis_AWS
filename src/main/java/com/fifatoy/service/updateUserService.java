@@ -1,6 +1,5 @@
 package com.fifatoy.service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -15,16 +14,16 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+
 public class updateUserService {
 
     final UserRepository userrepository;
 
     @Transactional
-    public void updateUser(SaveRequest SaveRequest) {
+    public void updateUser(SaveRequest SaveRequest) throws Exception {
         Optional<User> userOpt = userrepository.findById(SaveRequest.getEmail());
         if (userOpt.isPresent()) {
-            User newUser = new User(SaveRequest.getEmail(), "UPDATE", LocalDateTime.now());
-            userrepository.save(newUser);
+            userrepository.update(SaveRequest.getEmail(), "nativeQuery");
         } else {
             throw new DupException();
         }
