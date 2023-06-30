@@ -8,6 +8,7 @@ public class welcomecontroller {
 
     @GetMapping("/index")
     public String index() {
+        
         return "/";
     }
 
