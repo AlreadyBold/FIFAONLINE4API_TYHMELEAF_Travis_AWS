@@ -2,10 +2,8 @@ package com.fifatoy.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,18 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+/*import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;*/
 
 import com.fifatoy.util.APICALLUTIL;
-import com.fifatoy.exception.DupException;
-import com.fifatoy.exception.NoUserException;
-import com.fifatoy.model.SaveRequest;
-import com.fifatoy.model.User;
-import com.fifatoy.service.deleteUserService;
-import com.fifatoy.service.getUserService;
-import com.fifatoy.service.newUserService;
-import com.fifatoy.service.updateUserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -55,7 +45,7 @@ public class queryController {
      * private deleteUserService deleteuserservice;
      */
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    // private Logger logger = LoggerFactory.getLogger(getClass());
 
     @GetMapping("/query")
     public String query(HttpSession session, Model model, @RequestParam(value = "name", required = false) String name) {
