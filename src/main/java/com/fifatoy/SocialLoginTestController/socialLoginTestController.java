@@ -22,7 +22,6 @@ public class socialLoginTestController {
     @GetMapping("/kakaotest")
     public void kakaoCallback(@RequestParam String code) {
 
-        
         // 인가 코드 
         System.out.println(code);
     }
