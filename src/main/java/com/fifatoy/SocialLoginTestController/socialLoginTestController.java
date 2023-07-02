@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import lombok.RequiredArgsConstructor;
+
 
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/social")
 public class socialLoginTestController {
 
