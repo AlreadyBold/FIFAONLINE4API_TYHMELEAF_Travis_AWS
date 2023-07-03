@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
-import java.util.UUID;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,28 +25,24 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.OAuth20Service;
-import com.google.gson.JsonArray;
+import com.fasterxml.jackson.databind.util.ObjectBuffer;
+import com.fifatoy.service.GoogleOauthParam;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/social")
-public class socialLoginTestController {
+public class socialLoginTestController<googleOauthParams> {
 
-    // API KEY 값
     @Value("${KakaoApiKey}")
     private String kakaoApiKey;
+
+    @Value("${KakaoRedirectURL}")
+    private String KakaoRedirectURL;
 
     /**
      * kakao callback
@@ -81,7 +75,7 @@ public class socialLoginTestController {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=" + kakaoApiKey); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:8080/social/kakaotest"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=" + KakaoRedirectURL); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
@@ -192,6 +186,15 @@ public class socialLoginTestController {
          */
     }
 
+    @Value("${GoogleClientId}")
+    private String GoogleClientId;
+
+    @Value("${GoogleClientSecret}")
+    private String GoogleClientSecret;
+
+    @Value("${GoogleRedirectURL}")
+    private String GoogleRedirectURL;
+
     /**
      * google callback
      * [GET] /social/googletest
@@ -199,6 +202,73 @@ public class socialLoginTestController {
     @ResponseBody
     @GetMapping("/googletest")
     public void googleCallback(@RequestParam String code) {
+        RestTemplate rt = new RestTemplate();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/x-www-form-urlencoded");
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("client_id", GoogleClientId);
+        params.add("client_secret", GoogleClientSecret);
+        params.add("code", code);
+        params.add("grant_type", "authorization_code");
+        params.add("redirect_uri", GoogleRedirectURL);
+
+        HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(params, headers);
+
+        ResponseEntity<String> accessTokenResponse = rt.exchange(
+                "https://oauth2.googleapis.com/token",
+                HttpMethod.POST,
+                accessTokenRequest,
+                String.class);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        GoogleOauthParam googleOauthParams = null;
+
+        try {
+            googleOauthParams = objectMapper.readValue(accessTokenResponse.getBody(), GoogleOauthParam.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        HttpHeaders headers1 = new HttpHeaders();
+        headers1.add("Authorization", "Bearer " + googleOauthParams.getAccess_token());
+        System.out.println(headers1);
+
+        HttpEntity profileRequest = new HttpEntity(headers1);
+
+        /*
+         * <200 OK OK,
+         * {"access_token":
+         * "ya29.a0AbVbY6NmxPU3cQftcs4iNGkjFCYNvsLENpff_2mpCFGa5xfLfjGNx9eiafIL6V0jJ1X8-Uvrrx9xDJPBMg7Z962uccNRyw_xaVH1NOM2C2kCPfpkpJLo7Q-B58uMyfdkzIipriEqr46VTe-z2XzJmM9QE4V4aCgYKAaISARESFQFWKvPlXqEw6S2VMqqveqIOU270Gw0163",
+         * "scope":"https:\/\/www.googleapis.com\/auth\/drive.metadata.readonly",
+         * "token_type":"Bearer",
+         * "expires_in":3599}
+         * ,[Cache-Control:"no-cache, no-store, max-age=0, must-revalidate",
+         * Date:"Mon, 03 Jul 2023 06:30:32 GMT",
+         * Expires:"Mon, 01 Jan 1990 00:00:00 GMT",
+         * Pragma:"no-cache",
+         * Content-Type:"application/json; charset=utf-8",
+         * Vary:"X-Origin",
+         * "Referer",
+         * "Origin,Accept-Encoding",
+         * Server:"scaffolding on HTTPServer2",
+         * X-XSS-Protection:"0",
+         * X-Frame-Options:"SAMEORIGIN",
+         * X-Content-Type-Options:"nosniff",
+         * Alt-Svc:"h3=":443"; ma=2592000,h3-29=":443"; ma=2592000",
+         * Accept-Ranges:"none",
+         * Transfer-Encoding:"chunked"]>
+         */
+
+        ResponseEntity<JsonObject> profileResponse = rt.exchange(
+                "https://oauth2.googleapis.com/tokeninfo?id_token=",
+                HttpMethod.GET,
+                profileRequest,
+                JsonObject.class);
+
+        System.out.println("profileResponse == " + profileResponse);
+        System.out.println(googleOauthParams.getId_token());
 
     }
 
@@ -207,8 +277,6 @@ public class socialLoginTestController {
 
     @Value("${NaverClientSecret}")
     private String NaverClientSecret;
-
-    private String NaverREDIRECT_URI = "http://localhost:8080/social/navertest";
 
     private String NaverSESSION_STATE = "oauth_state";
 
@@ -255,8 +323,6 @@ public class socialLoginTestController {
 
         HttpEntity<HttpHeaders> profileHttpEntity = new HttpEntity<>(profileRequestHeader);
 
-        System.out.println("11111111111111111111111111");
-
         // profile api로 생성해둔 헤더를 담아서 요청을 보냅니다.
         ResponseEntity<String> profileResponse = rt.exchange(
                 PROFILE_API_URL,
@@ -269,7 +335,7 @@ public class socialLoginTestController {
          * 결과조회
          * "response":
          * {
-         * "id":"VaZTe11QQS3hPPyAayRlBxVxaT_QtgwrFO3hAL7RfMc",
+         * "id":"VaZTe11QQS3hPPyAayRlBxVxaT_QtgwrFO3hAL7RfMc" ,
          * "nickname":"HUMON",
          * "profile_image":
          * "https:\/\/phinf.pstatic.net\/contact\/20220512_297\/165232881520953nCk_PNG\/avatar_profile.png",
@@ -278,7 +344,7 @@ public class socialLoginTestController {
          * "email":"1187410@naver.com",
          * "mobile":"010-6388-9706",
          * "mobile_e164":"+821063889706",
-         * "name":"\uc774\uc900\ud615",
+         * "name":"\uc774\uc900\ud615" ( UNICODE ),
          * "birthday":"06-23",
          * "birthyear":"1997"
          * }
