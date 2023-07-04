@@ -227,19 +227,30 @@ public class socialLoginTestController<googleOauthParams> {
         String access_token = accessTokenNode.get("access_token").asText();
         String id_token = accessTokenNode.get("id_token").asText();
 
-        // id_token 활용 하여 유저정보 가져오기
+        // id_token 활용 하여 token_info 가져오기
         HttpHeaders headers2 = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         Map<String, String> map = new HashMap<>();
         map.put("id_token", id_token);
         HttpEntity entity2 = new HttpEntity(map, headers2);
-
-        ResponseEntity<JSONObject> result = restTemplate.exchange(
+        ResponseEntity<JSONObject> resulttokeninfo = restTemplate.exchange(
                 "https://oauth2.googleapis.com/tokeninfo",
                 HttpMethod.POST,
                 entity2,
                 JSONObject.class);
+
+        // access_token 활용 하여 user_info 가져오기
+        HttpHeaders headers3 = new HttpHeaders();
+        headers3.add("Authorization", "Bearer " + access_token);
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(headers3);
+        ResponseEntity<JSONObject> resultuserinfo = restTemplate.exchange(
+                "https://www.googleapis.com/oauth2/v2/userinfo",
+                HttpMethod.GET,
+                request,
+                JSONObject.class);
+
         /*
+         * TOKEN _ INFO
          * {at_hash":"q8VS9Ic4wVihJ4SaI9Kpqw",
          * "sub":"104860162525889304382",
          * "email_verified":"true",
@@ -275,6 +286,33 @@ public class socialLoginTestController<googleOauthParams> {
          * Alt-Svc:"h3=":443"; ma=2592000,h3-29=":443"; ma=2592000",
          * Accept-Ranges:"none",
          * Transfer-Encoding:"chunked"]>
+         * 
+         * USER_INFO
+         * {"name":"Junhyoung Lee",
+         * "id":"104860162525889304382",
+         * "verified_email":true,
+         * "given_name":"Junhyoung",
+         * "locale":"ko",
+         * "family_name":"Lee",
+         * "email":"junheong.winscore@gmail.com",
+         * "picture":
+         * "https:\/\/lh3.googleusercontent.com\/a\/AAcHTtfwjk_WV3PC1X1r5y0VI4QZw_lBSDn1che5NAzbduB7=s96-c"
+         * }
+         * [
+         * Date:"Tue, 04 Jul 2023 01:20:53 GMT",
+         * Cache-Control:"no-cache, no-store, max-age=0, must-revalidate",
+         * Expires:"Mon, 01 Jan 1990 00:00:00 GMT",
+         * Pragma:"no-cache",
+         * Content-Type:"application/json; charset=UTF-8",
+         * Vary:"X-Origin", "Referer", "Origin,Accept-Encoding",
+         * Server:"ESF",
+         * X-XSS-Protection:"0",
+         * X-Frame-Options:"SAMEORIGIN",
+         * X-Content-Type-Options:"nosniff",
+         * Alt-Svc:"h3=":443"; ma=2592000,h3-29=":443"; ma=2592000",
+         * Accept-Ranges:"none",
+         * Transfer-Encoding:"chunked"
+         * ]
          */
 
     }
