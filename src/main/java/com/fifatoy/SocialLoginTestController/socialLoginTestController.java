@@ -7,12 +7,15 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import com.fifatoy.service.GoogleOauthParam;
@@ -37,6 +41,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/social")
 public class socialLoginTestController<googleOauthParams> {
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Value("${KakaoApiKey}")
     private String kakaoApiKey;
@@ -54,14 +60,16 @@ public class socialLoginTestController<googleOauthParams> {
     public void kakaoCallback(@RequestParam String code) {
         // 인가 코드
         // 컨트롤러 접속 시 로그인 후 인가코드 발급확인
-        System.out.println(code);
+        // System.out.println(code);
 
-        // accessToken 받기
+        // accessToken
         String access_Token = "";
         String refresh_Token = "";
+
         // Token 발급 url
         String reqURL = "https://kauth.kakao.com/oauth/token";
 
+        // API 통신해서 accessToken 발급
         try {
             URL url = new URL(reqURL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -98,11 +106,9 @@ public class socialLoginTestController<googleOauthParams> {
             JsonParser parser = new JsonParser();
             JsonElement element = parser.parse(result);
 
+            // 토큰값 저장
             access_Token = element.getAsJsonObject().get("access_token").getAsString();
             refresh_Token = element.getAsJsonObject().get("refresh_token").getAsString();
-
-            System.out.println("access_token : " + access_Token);
-            System.out.println("refresh_token : " + refresh_Token);
 
             br.close();
             bw.close();
@@ -110,11 +116,8 @@ public class socialLoginTestController<googleOauthParams> {
             e.printStackTrace();
         }
 
-        System.out.println(access_Token);
-
-        String reqURL2 = "https://kapi.kakao.com/v2/user/me";
-
         // access_token을 이용하여 사용자 정보 조회
+        String reqURL2 = "https://kapi.kakao.com/v2/user/me";
         try {
             URL url = new URL(reqURL2);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -135,8 +138,6 @@ public class socialLoginTestController<googleOauthParams> {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println("response body : " + result);
-
             br.close();
 
         } catch (IOException e) {
@@ -199,60 +200,80 @@ public class socialLoginTestController<googleOauthParams> {
      * google callback
      * [GET] /social/googletest
      */
+
     @ResponseBody
     @GetMapping("/googletest")
     public void googleCallback(@RequestParam String code) {
-        RestTemplate rt = new RestTemplate();
+        // 컨트롤러 접속 시 로그인 후 인가코드 발급확인
+        // System.out.println(code);
 
+        // JWT 토큰 발급을 위한 Header값 설정
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/x-www-form-urlencoded");
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
+        // JWT 토큰 발급을 위한 Body값 설정
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("code", code);
         params.add("client_id", GoogleClientId);
         params.add("client_secret", GoogleClientSecret);
-        params.add("code", code);
-        params.add("grant_type", "authorization_code");
         params.add("redirect_uri", GoogleRedirectURL);
+        params.add("grant_type", "authorization_code");
 
-        HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(params, headers);
+        // 하나로 묶어주기
+        HttpEntity entity = new HttpEntity(params, headers);
 
-        ResponseEntity<String> accessTokenResponse = rt.exchange(
-                "https://oauth2.googleapis.com/token",
+        // API 전송하여 Token / id_token 발급
+        ResponseEntity<JsonNode> responseNode = restTemplate.exchange("https://oauth2.googleapis.com/token",
+                HttpMethod.POST, entity,
+                JsonNode.class);
+        JsonNode accessTokenNode = responseNode.getBody();
+
+        // 저장
+        String access_token = accessTokenNode.get("access_token").asText();
+        String id_token = accessTokenNode.get("id_token").asText();
+
+        // id_token 활용 하여 유저정보 가져오기
+        HttpHeaders headers2 = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        Map<String, String> map = new HashMap<>();
+        map.put("id_token", id_token);
+        HttpEntity entity2 = new HttpEntity(map, headers2);
+
+        ResponseEntity<JSONObject> result = restTemplate.exchange(
+                "https://oauth2.googleapis.com/tokeninfo",
                 HttpMethod.POST,
-                accessTokenRequest,
-                String.class);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        GoogleOauthParam googleOauthParams = null;
-
-        try {
-            googleOauthParams = objectMapper.readValue(accessTokenResponse.getBody(), GoogleOauthParam.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        HttpHeaders headers1 = new HttpHeaders();
-        headers1.add("Authorization", "Bearer " + googleOauthParams.getAccess_token());
-        System.out.println(headers1);
-
-        HttpEntity profileRequest = new HttpEntity(headers1);
-
+                entity2,
+                JSONObject.class);
         /*
-         * <200 OK OK,
-         * {"access_token":
-         * "ya29.a0AbVbY6NmxPU3cQftcs4iNGkjFCYNvsLENpff_2mpCFGa5xfLfjGNx9eiafIL6V0jJ1X8-Uvrrx9xDJPBMg7Z962uccNRyw_xaVH1NOM2C2kCPfpkpJLo7Q-B58uMyfdkzIipriEqr46VTe-z2XzJmM9QE4V4aCgYKAaISARESFQFWKvPlXqEw6S2VMqqveqIOU270Gw0163",
-         * "scope":"https:\/\/www.googleapis.com\/auth\/drive.metadata.readonly",
-         * "token_type":"Bearer",
-         * "expires_in":3599}
-         * ,[Cache-Control:"no-cache, no-store, max-age=0, must-revalidate",
-         * Date:"Mon, 03 Jul 2023 06:30:32 GMT",
+         * {at_hash":"q8VS9Ic4wVihJ4SaI9Kpqw",
+         * "sub":"104860162525889304382",
+         * "email_verified":"true",
+         * "kid":"9341dedeee2d1869b657fa930300082fe26b3d92",
+         * "iss":"https:\/\/accounts.google.com",
+         * "typ":"JWT",
+         * "given_name":"Junhyoung",
+         * "locale":"ko",
+         * "picture":
+         * "https:\/\/lh3.googleusercontent.com\/a\/AAcHTtfwjk_WV3PC1X1r5y0VI4QZw_lBSDn1che5NAzbduB7=s96-c",
+         * "aud":
+         * "1004079416790-gqvuicfa9v85afjhnl7omuo3s7iu0843.apps.googleusercontent.com",
+         * "azp":
+         * "1004079416790-gqvuicfa9v85afjhnl7omuo3s7iu0843.apps.googleusercontent.com",
+         * "name":"Junhyoung Lee",
+         * "exp":"1688432358",
+         * "family_name":"Lee",
+         * "iat":"1688428758",
+         * "alg":"RS256",
+         * "email":"junheong.winscore@gmail.com"},
+         * [Date:"Mon, 03 Jul 2023 23:59:18 GMT",
+         * Pragma:"no-cache", Cache-Control:
+         * "no-cache, no-store, max-age=0, must-revalidate",
          * Expires:"Mon, 01 Jan 1990 00:00:00 GMT",
-         * Pragma:"no-cache",
-         * Content-Type:"application/json; charset=utf-8",
-         * Vary:"X-Origin",
+         * Content-Type:"application/json;
+         * charset=UTF-8", Vary:"X-Origin",
          * "Referer",
          * "Origin,Accept-Encoding",
-         * Server:"scaffolding on HTTPServer2",
+         * Server:"ESF",
          * X-XSS-Protection:"0",
          * X-Frame-Options:"SAMEORIGIN",
          * X-Content-Type-Options:"nosniff",
@@ -260,15 +281,6 @@ public class socialLoginTestController<googleOauthParams> {
          * Accept-Ranges:"none",
          * Transfer-Encoding:"chunked"]>
          */
-
-        ResponseEntity<JsonObject> profileResponse = rt.exchange(
-                "https://oauth2.googleapis.com/tokeninfo?id_token=",
-                HttpMethod.GET,
-                profileRequest,
-                JsonObject.class);
-
-        System.out.println("profileResponse == " + profileResponse);
-        System.out.println(googleOauthParams.getId_token());
 
     }
 
@@ -289,9 +301,9 @@ public class socialLoginTestController<googleOauthParams> {
      */
     @ResponseBody
     @GetMapping("/navertest")
-    public void naverCallback(@RequestParam String code, @RequestParam String state) {
+    public void naverCallback(@RequestParam String code) {
 
-        RestTemplate rt = new RestTemplate();
+        // 토큰 정보 얻기 위한 정보 입력
 
         HttpHeaders accessTokenHeaders = new HttpHeaders();
         accessTokenHeaders.add("Content-type", "application/x-www-form-urlencoded");
@@ -306,14 +318,12 @@ public class socialLoginTestController<googleOauthParams> {
         HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(accessTokenParams,
                 accessTokenHeaders);
 
-        ResponseEntity<JSONObject> accessTokenResponseJson = rt.exchange(
+        // API 통신
+        ResponseEntity<JSONObject> accessTokenResponseJson = restTemplate.exchange(
                 "https://nid.naver.com/oauth2.0/token",
                 HttpMethod.POST,
                 accessTokenRequest,
                 JSONObject.class);
-
-        System.out.println("accessTokenResponse ==== " +
-                accessTokenResponseJson.getBody().get("access_token"));
 
         String accessTokenResponse = (String) accessTokenResponseJson.getBody().get("access_token");
 
@@ -324,13 +334,12 @@ public class socialLoginTestController<googleOauthParams> {
         HttpEntity<HttpHeaders> profileHttpEntity = new HttpEntity<>(profileRequestHeader);
 
         // profile api로 생성해둔 헤더를 담아서 요청을 보냅니다.
-        ResponseEntity<String> profileResponse = rt.exchange(
+        ResponseEntity<String> profileResponse = restTemplate.exchange(
                 PROFILE_API_URL,
                 HttpMethod.POST,
                 profileHttpEntity,
                 String.class);
 
-        System.out.println(profileResponse);
         /*
          * 결과조회
          * "response":
