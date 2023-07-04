@@ -14,6 +14,7 @@ public class FifatoyApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FifatoyApplication.class, args);
+
 	}
 
 }

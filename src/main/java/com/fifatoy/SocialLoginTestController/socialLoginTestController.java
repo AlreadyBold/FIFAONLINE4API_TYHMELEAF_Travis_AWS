@@ -30,10 +30,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
-import lombok.RequiredArgsConstructor;
-
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("/social")
 public class socialLoginTestController<googleOauthParams> {
 
@@ -123,7 +120,7 @@ public class socialLoginTestController<googleOauthParams> {
 
             // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            System.out.println("responseCode : " + responseCode);
+            // System.out.println("responseCode : " + responseCode);
 
             // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -133,6 +130,7 @@ public class socialLoginTestController<googleOauthParams> {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
+            System.out.println(result);
             br.close();
 
         } catch (IOException e) {
@@ -179,6 +177,37 @@ public class socialLoginTestController<googleOauthParams> {
          * "birthday_type":"SOLAR",
          * "has_gender":true,
          * "gender_needs_agreement":false,"gender":"male"
+         * }
+         * }
+         * 
+         * {"id":2893376035,
+         * "connected_at":"2023-07-04T07:27:25Z",
+         * "properties":{
+         * "nickname":"정민영",
+         * "profile_image":
+         * "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg",
+         * "thumbnail_image":
+         * "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg"
+         * },
+         * "kakao_account":{
+         * "profile_nickname_needs_agreement":false,
+         * "profile_image_needs_agreement":false,
+         * "profile":{
+         * "nickname":"정민영",
+         * "thumbnail_image_url":
+         * "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_110x110.jpg",
+         * "profile_image_url":
+         * "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg",
+         * "is_default_image":true
+         * },
+         * "has_email":true,
+         * "email_needs_agreement":true,
+         * "has_age_range":true,
+         * "age_range_needs_agreement":true,
+         * "has_birthday":true,
+         * "birthday_needs_agreement":true,
+         * "has_gender":true,
+         * "gender_needs_agreement":true
          * }
          * }
          */
@@ -343,7 +372,6 @@ public class socialLoginTestController<googleOauthParams> {
     public void naverCallback(@RequestParam String code) {
 
         // 토큰 정보 얻기 위한 정보 입력
-
         HttpHeaders accessTokenHeaders = new HttpHeaders();
         accessTokenHeaders.add("Content-type", "application/x-www-form-urlencoded");
 
@@ -352,7 +380,7 @@ public class socialLoginTestController<googleOauthParams> {
         accessTokenParams.add("client_id", NaverClientId);
         accessTokenParams.add("client_secret", NaverClientSecret);
         accessTokenParams.add("code", code); // 응답으로 받은 코드
-        accessTokenParams.add("state", NaverSESSION_STATE); // 응답으로 받은 상태
+        accessTokenParams.add("state", NaverSESSION_STATE);
 
         HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(accessTokenParams,
                 accessTokenHeaders);
