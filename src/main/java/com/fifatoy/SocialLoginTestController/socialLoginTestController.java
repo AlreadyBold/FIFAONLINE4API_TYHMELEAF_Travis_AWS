@@ -146,7 +146,8 @@ public class socialLoginTestController<googleOauthParams> {
          * "id":2883786726,
          * "connected_at":"2023-07-02T15:23:48Z",
          * "properties":
-         * {"nickname":"이준형",
+         * {
+         * "nickname":"이준형",
          * "profile_image":
          * "http://k.kakaocdn.net/dn/iSN9j/btslafjB4C8/3OSpThTQw7AU4AT4380a30/img_640x640.jpg",
          * "thumbnail_image":
@@ -156,7 +157,8 @@ public class socialLoginTestController<googleOauthParams> {
          * "profile_nickname_needs_agreement":false,
          * "profile_image_needs_agreement":false,
          * "profile":
-         * {"nickname":"이준형",
+         * {
+         * "nickname":"이준형",
          * "thumbnail_image_url":
          * "http://k.kakaocdn.net/dn/iSN9j/btslafjB4C8/3OSpThTQw7AU4AT4380a30/img_110x110.jpg",
          * "profile_image_url":
@@ -251,7 +253,8 @@ public class socialLoginTestController<googleOauthParams> {
 
         /*
          * TOKEN _ INFO
-         * {at_hash":"q8VS9Ic4wVihJ4SaI9Kpqw",
+         * {
+         * at_hash":"q8VS9Ic4wVihJ4SaI9Kpqw",
          * "sub":"104860162525889304382",
          * "email_verified":"true",
          * "kid":"9341dedeee2d1869b657fa930300082fe26b3d92",
@@ -270,8 +273,10 @@ public class socialLoginTestController<googleOauthParams> {
          * "family_name":"Lee",
          * "iat":"1688428758",
          * "alg":"RS256",
-         * "email":"junheong.winscore@gmail.com"},
-         * [Date:"Mon, 03 Jul 2023 23:59:18 GMT",
+         * "email":"junheong.winscore@gmail.com"
+         * },
+         * [
+         * Date:"Mon, 03 Jul 2023 23:59:18 GMT",
          * Pragma:"no-cache", Cache-Control:
          * "no-cache, no-store, max-age=0, must-revalidate",
          * Expires:"Mon, 01 Jan 1990 00:00:00 GMT",
@@ -285,9 +290,10 @@ public class socialLoginTestController<googleOauthParams> {
          * X-Content-Type-Options:"nosniff",
          * Alt-Svc:"h3=":443"; ma=2592000,h3-29=":443"; ma=2592000",
          * Accept-Ranges:"none",
-         * Transfer-Encoding:"chunked"]>
+         * Transfer-Encoding:"chunked"
+         * ]
          * 
-         * USER_INFO
+         * USER _ INFO
          * {"name":"Junhyoung Lee",
          * "id":"104860162525889304382",
          * "verified_email":true,
