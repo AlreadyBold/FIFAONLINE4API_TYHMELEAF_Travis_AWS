@@ -78,6 +78,14 @@
             <version>2.3.8</version>
         </dependency>
 
+
+		<!-- SYSOUT 대신 LOG 사용하기 -->
+		<dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.11</version>
+        </dependency>
+
 	</dependencies>
 	
 	
