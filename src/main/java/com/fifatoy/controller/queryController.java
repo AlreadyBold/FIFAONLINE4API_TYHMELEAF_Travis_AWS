@@ -17,7 +17,9 @@ import org.slf4j.LoggerFactory;*/
 import com.fifatoy.util.APICALLUTIL;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Controller
 @RequestMapping("/member")
 public class queryController {
@@ -96,6 +98,7 @@ public class queryController {
             matchInfo.add(userInfo);
         }
         model.addAttribute("matchInfo", matchInfo);
+        log.info(matchInfo);
 
         /*
          * JPA TEST CODE (CREATE)

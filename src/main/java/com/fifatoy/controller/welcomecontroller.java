@@ -8,8 +8,8 @@ public class welcomecontroller {
 
     @GetMapping("/index")
     public String index() {
-        
-        return "/";
+
+        return "index";
     }
 
     @GetMapping("/join")

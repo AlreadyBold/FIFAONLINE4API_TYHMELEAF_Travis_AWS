@@ -50,9 +50,7 @@ public class socialLoginTestController<googleOauthParams> {
     @GetMapping("/kakaotest")
 
     public void kakaoCallback(@RequestParam String code) {
-        // 인가 코드
-        // 컨트롤러 접속 시 로그인 후 인가코드 발급확인
-        // System.out.println(code);
+        // code = 인가 코드
 
         // accessToken
         String access_Token = "";
@@ -82,7 +80,6 @@ public class socialLoginTestController<googleOauthParams> {
 
             // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            // System.out.println("responseCode : " + responseCode);
 
             // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -92,7 +89,6 @@ public class socialLoginTestController<googleOauthParams> {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            // System.out.println("response body : " + result);
 
             // Gson 라이브러리에 포함된 클래스로 JSON파싱 객체 생성
             JsonParser parser = new JsonParser();
@@ -120,7 +116,6 @@ public class socialLoginTestController<googleOauthParams> {
 
             // 결과 코드가 200이라면 성공
             int responseCode = conn.getResponseCode();
-            // System.out.println("responseCode : " + responseCode);
 
             // 요청을 통해 얻은 JSON타입의 Response 메세지 읽어오기
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -130,7 +125,6 @@ public class socialLoginTestController<googleOauthParams> {
             while ((line = br.readLine()) != null) {
                 result += line;
             }
-            System.out.println(result);
             br.close();
 
         } catch (IOException e) {
@@ -230,8 +224,7 @@ public class socialLoginTestController<googleOauthParams> {
     @ResponseBody
     @GetMapping("/googletest")
     public void googleCallback(@RequestParam String code) {
-        // 컨트롤러 접속 시 로그인 후 인가코드 발급확인
-        // System.out.println(code);
+        // code = 인가 코드
 
         // JWT 토큰 발급을 위한 Header값 설정
         HttpHeaders headers = new HttpHeaders();
@@ -370,6 +363,7 @@ public class socialLoginTestController<googleOauthParams> {
     @ResponseBody
     @GetMapping("/navertest")
     public void naverCallback(@RequestParam String code) {
+        // code = 인가 코드
 
         // 토큰 정보 얻기 위한 정보 입력
         HttpHeaders accessTokenHeaders = new HttpHeaders();

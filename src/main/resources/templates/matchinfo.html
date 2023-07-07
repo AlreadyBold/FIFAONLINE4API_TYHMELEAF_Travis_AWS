@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <header id="header" style="margin-bottom: 0;">
+        <h1>FIFA ONLINE 4 USER INFO</h1>
+        <nav id="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li>
+                    <a href="#" class="icon solid fa-angle-down">Detail Menu</a>
+                    <ul>
+                        <li><a href="#">Current Match</a></li>
+                        <li><a href="#">Current Trade</a>
+                            <ul>
+                                <li><a th:href="@{/Trade/buyInfo}">BUY </a></li>
+                                <li><a th:href="@{/Trade/sellInfo}">SELL</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="#" class="button">Sign Up</a></li>
+            </ul>
+        </nav>
+    </header>
+    <section id="main" class="container">
+        <header>
+            <br>
+            <h2><span th:text="${session.nickname}"></span></h2>
+            <p> 감독님 </p>
+        </header>
+    </section>
+
+    <!-- Table -->
+    <section class="box" style="margin-right: 200px; margin-left: 200px;">
+        <h4><span th:text="${session.WHY}"></span> - INFO</h4>
+        <div class="table-wrapper">
+            <table class="alt">
+                <thead>
+                    <tr>
+                        <th>SEASON</th>
+                        <th>NAME</th>
+                        <th>GRADE</th>
+                        <th>PRICE</th>
+                        <th>DATE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="info : ${BuyInfo}">
+                        <td><span th:text="${info.className}"></span></td>
+                        <td><span th:text="${info.name}"></span></td>
+                        <td><span th:text="${info.grade}"></span> 강</td>
+                        <td><span th:text="${info.value}"></span> BP</td>
+                        <td><span th:text="${info.tradeDate}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    </div>
+    </div>
+    <link rel="stylesheet" href="../assets/css/main.css" />
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.dropotron.min.js"></script>
+    <script src="../assets/js/jquery.scrollex.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+
+</html>
