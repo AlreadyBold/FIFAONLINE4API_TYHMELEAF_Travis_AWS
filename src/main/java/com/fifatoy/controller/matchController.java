@@ -1,8 +1,5 @@
 package com.fifatoy.controller;
 
-import java.util.ArrayList;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +26,8 @@ public class matchController {
 
     @GetMapping("/MatchInfo")
     public String MatchInfo(HttpSession session, Model model, @RequestParam int code) {
-        // Map<Integer, String> arr = ((Object) apicallutil.NotKeyArray(MatchTypeUrl));
 
-        return "currentTradeinfo";
+        return "matchinfo";
     }
 
 }
