@@ -2,6 +2,7 @@ package com.fifatoy.util;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 public class APICALLUTIL {
     // DateTime
     DecimalFormat df = new DecimalFormat("###,###");
@@ -61,11 +65,11 @@ public class APICALLUTIL {
     }
 
     /**
-     * API키가 필요한 API 요청, 반환 데이터가 JSONArray 형식인 경우 ( API 주소 url, APIKEY )
+     * API키가 필요한 API 요청, 반환 데이터가 JSONArray 내부에 Map 형식인 경우 ( API 주소 url, APIKEY )
      * 
      * @date : 2023-01-30
      */
-    public ArrayList<Map<String, Object>> UseKeyArray(String url, String apiKey) {
+    public ArrayList<Map<String, Object>> UseKeyMapInArray(String url, String apiKey) {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json;charset=UTF-8");
         headers.add("Authorization", apiKey);
@@ -74,6 +78,23 @@ public class APICALLUTIL {
         ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.GET, tokenRequest, JSONArray.class);
         return (ArrayList<Map<String, Object>>) response.getBody();
     }
+
+    /**
+     * API키가 필요한 API 요청, 반환 데이터가 JSONArray 형식인 경우 ( API 주소 url, APIKEY )
+     * 
+     * @date : 2023-01-30
+     */
+    public ArrayList<Object> UseKeyArray(String url, String apiKey) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json;charset=UTF-8");
+        headers.add("Authorization", apiKey);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<?> tokenRequest = new HttpEntity<>(headers);
+        ResponseEntity<?> response = restTemplate.exchange(url, HttpMethod.GET, tokenRequest, JSONArray.class);
+        return (ArrayList<Object>) response.getBody();
+    }
+
+
 
     /**
      * 이적시장 구매 및 판매 조회
@@ -90,7 +111,7 @@ public class APICALLUTIL {
         String url = "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId
                 + "/markets?tradetype=" + type + "&offset=0&limit=100";
         ArrayList<Map<String, Object>> tradeInfoMap = new ArrayList<Map<String, Object>>();
-        tradeInfoMap = (ArrayList<Map<String, Object>>) apicallutil.UseKeyArray(url, apiKey);
+        tradeInfoMap = (ArrayList<Map<String, Object>>) apicallutil.UseKeyMapInArray(url, apiKey);
 
         // 시즌 정보 불러오기
         url = "https://static.api.nexon.co.kr/fifaonline4/latest/seasonid.json";
@@ -146,4 +167,19 @@ public class APICALLUTIL {
         return (ArrayList<Map<String, Object>>) TradeInfo;
     }
 
+
+    public ArrayList<Object> matchInfo(String accessId, int type, String apiKey) {
+        APICALLUTIL apicallutil = new APICALLUTIL();
+        String url = 
+        "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId+ "/matches?matchtype=" + type;
+
+        log.info(url);
+        // 10경기만 
+        ArrayList<Object> matchInfoMap = new ArrayList< Object>();
+        matchInfoMap = apicallutil.UseKeyArray(url, apiKey);
+        matchInfoMap.subList(0, 10);
+        log.info(matchInfoMap);
+
+        return matchInfoMap;
+    }
 }

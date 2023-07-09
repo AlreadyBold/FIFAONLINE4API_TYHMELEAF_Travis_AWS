@@ -21,7 +21,7 @@
                         <li><a href="#">Current Match</a>
                             <ul>
                                 <li th:each="info : ${matchInfo}" th:attr="data-value=${info.matchType}">
-                                    <a th:href="@{|/matchInfo/${info.matchTypeCd}|}" class='close'
+                                    <a th:href="@{|/matchInfo?code=${info.matchTypeCd}|}" class='close'
                                         aria-hidden='true'><span th:text="${info.matchType}" th:remove="tag"></span></a>
                                 </li>
                             </ul>
@@ -88,3 +88,7 @@
 </body>
 
 </html>
+<script>
+
+
+</script>

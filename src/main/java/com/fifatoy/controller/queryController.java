@@ -76,7 +76,7 @@ public class queryController {
         // 회원정보로 최고등급 조회
         url = "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId + "/maxdivision";
         ArrayList<Map<String, Object>> resultListMap = new ArrayList<Map<String, Object>>();
-        resultListMap = (ArrayList<Map<String, Object>>) apicallutil.UseKeyArray(url, apiKey);
+        resultListMap = (ArrayList<Map<String, Object>>) apicallutil.UseKeyMapInArray(url, apiKey);
 
         // 모델에 삽입
         ArrayList<Map<String, Object>> matchInfo = new ArrayList<Map<String, Object>>();
