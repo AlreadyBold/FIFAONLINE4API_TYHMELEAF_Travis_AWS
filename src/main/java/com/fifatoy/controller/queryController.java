@@ -146,11 +146,11 @@ public class queryController {
          * }
          */
 
-        return "query";
+        return "main";
     }
 
     @GetMapping("/queryhome")
     public String queryhome(Model model) {
-        return "query";
+        return "main";
     }
 }

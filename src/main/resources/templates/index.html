@@ -34,11 +34,9 @@
             <br>
             <br>
             <section id="cta">
-                <form id="query" action="/member/query" method="GET" novalidate>
-                    <input type="text" id="name" name="name" placeholder="닉네임을 입력하시오">
-                    <br>
-                </form>
-                <button value="검색" onclick="query()" class="button alt">검색</button>
+                <input type="text" id="name" name="name" placeholder="닉네임을 입력하시오">
+                <br>
+                <button value="검색" onclick="nickname_valid()" class="button alt">검색</button>
             </section>
         </section>
     </header>
@@ -46,19 +44,33 @@
 
 </body>
 <script>
-    function query() {
+
+    function nickname_valid() {
         var name = $("#name").val();
-        var jsonData = {
-            "name": name,
-        }
-        if (name == "") {
+        if (name == null || name == "") {
             alert(" 닉네임을 입력해주세요 ");
         } else {
-            console.log(" 왜 되지 ? ");
-            document.getElementById("query").submit();
+            $.ajax({
+                type: 'GET',
+                url: "/validation/nickname",
+                data: {
+                    'name': name
+                },
+                datatype: 'text',
+                success: function (result) {
+                    if (result == "FAIL") {
+                        alert("존재하지 않는 닉네임입니다.");
+                        nickname_overlap_input.focus();
+                    } else {
+                        window.location.href = "member/query?name=" + result;
+                    }
+                }
+            }
+            )
         }
-        console.log(name);
     }
+
+
 </script>
 
 </html>

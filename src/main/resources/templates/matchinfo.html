@@ -14,11 +14,20 @@
         <h1>FIFA ONLINE 4 USER INFO</h1>
         <nav id="nav">
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="/">검색하러가기</a></li>
                 <li>
                     <a href="#" class="icon solid fa-angle-down">Detail Menu</a>
                     <ul>
-                        <li><a href="#">Current Match</a></li>
+                        <li><a href="#">Current Match</a>
+                            <ul>
+                                <li th:each="info : ${matchType}" th:attr="data-value=${info.desc}">
+                                    <a th:onclick="|javascript:match_valid('${info.matchtype}')|" class='close'
+                                        aria-hidden='true'>
+                                        <span th:text="${info.desc}" th:remove="tag"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li><a href="#">Current Trade</a>
                             <ul>
                                 <li><a th:href="@{/Trade/buyInfo}">BUY </a></li>
@@ -27,7 +36,6 @@
                         </li>
                     </ul>
                 </li>
-                <li><a href="#" class="button">Sign Up</a></li>
             </ul>
         </nav>
     </header>
@@ -41,7 +49,7 @@
 
     <!-- Table -->
     <section class="box" style="margin-right: 200px; margin-left: 200px;">
-        <h4><span th:text="${session.WHY}"></span> - INFO</h4>
+        <h4>MATCH - INFO</h4>
         <div class="table-wrapper">
             <table class="alt">
                 <thead>
@@ -77,3 +85,25 @@
 </body>
 
 </html>
+
+<script>
+    function match_valid(matchType) {
+        $.ajax({
+            type: 'GET',
+            url: "/validation/match",
+            data: {
+                'matchType': matchType
+            },
+            success: function (result) {
+                if (result == "FAIL") {
+                    alert("한번도 한 적 없는 모드입니다.");
+                } else {
+                    window.location.href = "matchInfo?code=" + result;
+                }
+            }
+        }
+        )
+    }
+
+
+</script>

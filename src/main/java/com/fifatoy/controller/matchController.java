@@ -1,6 +1,7 @@
 package com.fifatoy.controller;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -15,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.log4j.Log4j2;
 
 @Controller
-@RequestMapping("/matchInfo")
+@RequestMapping("/member")
 @Log4j2
 public class matchController {
     // API키
@@ -25,14 +26,20 @@ public class matchController {
     // UTIL
     APICALLUTIL apicallutil = new APICALLUTIL();
 
-    @GetMapping()
+    @GetMapping("/matchInfo")
     public String MatchInfo(HttpSession session, Model model, @RequestParam int code) {
         String accessId = (String) session.getAttribute("accessId");
         ArrayList<Object> matchInfoArray = apicallutil.matchInfo(accessId, code, apiKey);
 
-        model.addAttribute("matchInfo", apicallutil.matchDetailInfo(matchInfoArray, apiKey, accessId));
+        model.addAttribute("matchInfo", apicallutil.matchDetailInfo(matchInfoArray, apiKey, code, accessId));
 
-        log.info(model);
+        // 매치타입 가져오기 API 호출 하여 맵에 저장
+        String url = "https://static.api.nexon.co.kr/fifaonline4/latest/matchtype.json";
+        ArrayList<Map<String, Object>> matchTypeMap = new ArrayList<Map<String, Object>>();
+        matchTypeMap = (ArrayList<Map<String, Object>>) apicallutil.NotKeyArray(url);
+
+        model.addAttribute("matchType", matchTypeMap);
+        // log.info(model);
 
         return "matchinfo";
     }

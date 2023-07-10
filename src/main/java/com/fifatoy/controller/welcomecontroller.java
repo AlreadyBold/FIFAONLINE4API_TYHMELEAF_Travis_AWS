@@ -12,9 +12,4 @@ public class welcomecontroller {
         return "index";
     }
 
-    @GetMapping("/join")
-    public String join() {
-        return "memberjoin";
-    }
-
 }
