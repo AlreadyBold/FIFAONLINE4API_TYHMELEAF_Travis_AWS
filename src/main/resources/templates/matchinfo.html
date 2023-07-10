@@ -46,20 +46,18 @@
             <table class="alt">
                 <thead>
                     <tr>
-                        <th>SEASON</th>
-                        <th>NAME</th>
-                        <th>GRADE</th>
-                        <th>PRICE</th>
                         <th>DATE</th>
+                        <th>NAMES</th>
+                        <th>SCORE</th>
+                        <th>RESULT</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="info : ${BuyInfo}">
-                        <td><span th:text="${info.className}"></span></td>
-                        <td><span th:text="${info.name}"></span></td>
-                        <td><span th:text="${info.grade}"></span> 강</td>
-                        <td><span th:text="${info.value}"></span> BP</td>
-                        <td><span th:text="${info.tradeDate}"></td>
+                    <tr th:each="info : ${matchInfo}">
+                        <td><span th:text="${info.matchDate}"></span></td>
+                        <td><span th:text="${info.names}"></span></td>
+                        <td><span th:text="${info.score}"></span></td>
+                        <td><span th:text="${info.result}"></span></td>
                     </tr>
                 </tbody>
             </table>

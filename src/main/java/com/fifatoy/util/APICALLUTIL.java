@@ -2,18 +2,18 @@ package com.fifatoy.util;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import jakarta.servlet.http.HttpSession;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -94,8 +94,6 @@ public class APICALLUTIL {
         return (ArrayList<Object>) response.getBody();
     }
 
-
-
     /**
      * 이적시장 구매 및 판매 조회
      * 
@@ -167,19 +165,88 @@ public class APICALLUTIL {
         return (ArrayList<Map<String, Object>>) TradeInfo;
     }
 
-
     public ArrayList<Object> matchInfo(String accessId, int type, String apiKey) {
         APICALLUTIL apicallutil = new APICALLUTIL();
-        String url = 
-        "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId+ "/matches?matchtype=" + type;
+        String url = "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId + "/matches?matchtype=" + type;
 
         log.info(url);
-        // 10경기만 
-        ArrayList<Object> matchInfoMap = new ArrayList< Object>();
-        matchInfoMap = apicallutil.UseKeyArray(url, apiKey);
-        matchInfoMap.subList(0, 10);
-        log.info(matchInfoMap);
+        // 10경기만
+        ArrayList<Object> matchInfoArray = new ArrayList<Object>();
+        matchInfoArray = apicallutil.UseKeyArray(url, apiKey);
+        matchInfoArray.subList(0, 10);
+        log.info(matchInfoArray);
 
-        return matchInfoMap;
+        return matchInfoArray;
     }
+
+    public ArrayList<Map<String, Object>> matchDetailInfo(ArrayList<Object> matchInfoArray, String apiKey,
+            String accessId) {
+        APICALLUTIL apicallutil = new APICALLUTIL();
+        ArrayList<Map<String, Object>> matchDetailInfo = new ArrayList<>();
+        // matchDate / matchResult / goalTotal ( int ) / controller
+        // 상대선수 nickname / 상대선수 goalTotal( int )
+        /*
+         * matchDetailInfo.put("matchDate", " ");
+         * matchDetailInfo.put("matchResult", " ");
+         * matchDetailInfo.put("goalTotal", " ");
+         * matchDetailInfo.put("controller", " ");
+         * matchDetailInfo.put("otherPlayerNickname", " ");
+         * matchDetailInfo.put("otherPlayerGoalTotal", " ");
+         */
+
+        for (int i = 0; i < 10; i++) {
+            int userNo = 1;
+            int otherUserNo = 0;
+            Map<String, Object> deatilMap = new HashMap<String, Object>();
+
+            String url = "https://api.nexon.co.kr/fifaonline4/v1.0/matches/" + matchInfoArray.get(i).toString();
+
+            log.info(url);
+            Map<String, Object> matches = new HashMap<String, Object>();
+            matches = apicallutil.UseKeyObject(url, apiKey);
+
+            // if문 시작
+            ArrayList<Map<String, Object>> matchInfo = (ArrayList<Map<String, Object>>) matches.get("matchInfo");
+            String validAccessId = (String) matchInfo.get(0).get("accessId");
+
+            if (accessId.equals(validAccessId)) {
+                userNo = 0;
+                otherUserNo = 1;
+            }
+
+            String matchDate = (String) matches.get("matchDate").toString().substring(0, 10);
+
+            String nickname = (String) matchInfo.get(userNo).get("nickname");
+
+            String otherNickname = (String) matchInfo.get(otherUserNo).get("nickname");
+
+            String matchResult = matchMapData("matchDetail", userNo, matchInfo).get("matchResult").toString();
+
+            String goalTotal = matchMapData("shoot", userNo, matchInfo).get("goalTotal").toString();
+
+            String otherGoalTotal = matchMapData("shoot", otherUserNo, matchInfo).get("goalTotal").toString();
+
+            /*
+             * log.info("matchDate = " + matchDate);
+             * log.info(nickname + " VS " + otherNickname);
+             * log.info("matchResult = " + matchResult);
+             * log.info(goalTotal + " : " + otherGoalTotal);
+             */
+
+            deatilMap.put("matchDate", matchDate);
+            deatilMap.put("names", nickname + " VS " + otherNickname);
+            deatilMap.put("score", goalTotal + " : " + otherGoalTotal);
+            deatilMap.put("result", matchResult);
+
+            matchDetailInfo.add(deatilMap);
+        }
+
+        return matchDetailInfo;
+    }
+
+    public Map<String, Object> matchMapData(String key, int userNo, ArrayList<Map<String, Object>> matchInfo) {
+
+        return (Map<String, Object>) matchInfo.get(userNo).get(key);
+    }
+
 }

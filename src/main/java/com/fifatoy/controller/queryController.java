@@ -98,7 +98,9 @@ public class queryController {
             matchInfo.add(userInfo);
         }
         model.addAttribute("matchInfo", matchInfo);
-        log.info(matchInfo);
+        model.addAttribute("matchType", matchTypeMap);
+
+        log.info(model);
 
         /*
          * JPA TEST CODE (CREATE)

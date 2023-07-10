@@ -27,16 +27,14 @@ public class matchController {
     // UTIL
     APICALLUTIL apicallutil = new APICALLUTIL();
 
-
     @GetMapping()
     public String MatchInfo(HttpSession session, Model model, @RequestParam int code) {
         String accessId = (String) session.getAttribute("accessId");
-        log.info(accessId);
-        log.info(code);
-        ArrayList<Object> matchInfoMap = apicallutil.matchInfo(accessId,code,apiKey);
-        log.info(matchInfoMap);
-        // date / detail 그리고 ..? 
-        
+        ArrayList<Object> matchInfoArray = apicallutil.matchInfo(accessId, code, apiKey);
+
+        model.addAttribute("matchInfo", apicallutil.matchDetailInfo(matchInfoArray, apiKey, accessId));
+
+        log.info(model);
 
         return "matchinfo";
     }
