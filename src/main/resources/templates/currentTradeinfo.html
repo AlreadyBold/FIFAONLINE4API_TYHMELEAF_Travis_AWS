@@ -103,7 +103,7 @@
                 if (result == "FAIL") {
                     alert("한번도 한 적 없는 모드입니다.");
                 } else {
-                    window.location.href = "matchInfo?code=" + result;
+                    window.location.replace("/member/matchInfo?code=" + result)
                 }
             }
         }

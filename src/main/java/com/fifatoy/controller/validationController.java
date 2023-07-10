@@ -50,7 +50,7 @@ public class validationController {
         String url = "https://api.nexon.co.kr/fifaonline4/v1.0/users/" + accessId + "/matches?matchtype=" + matchType;
 
         ArrayList<Object> matchinfo = apicallutil.UseKeyArray(url, apiKey);
-        log.info(matchinfo);
+        // log.info(matchinfo);
         if (matchinfo.isEmpty()) {
             return "FAIL";
         } else {
