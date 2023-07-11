@@ -1,6 +1,5 @@
 package com.fifatoy.controller;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -35,7 +34,14 @@ public class validationController {
         String url = "https://api.nexon.co.kr/fifaonline4/v1.0/users?nickname=" + nickname + "";
         try {
             Map<String, Object> userinfo = (Map<String, Object>) apicallutil.UseKeyObject(url, apiKey);
-            return nickname;
+
+            if (userinfo.isEmpty()) {
+                return "FAIL";
+            } else {
+                log.info("userinfovalid url = " + url + "userinfo  = " + userinfo);
+                return nickname;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return "FAIL";

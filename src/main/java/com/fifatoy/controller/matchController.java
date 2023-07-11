@@ -39,7 +39,7 @@ public class matchController {
         matchTypeMap = (ArrayList<Map<String, Object>>) apicallutil.NotKeyArray(url);
 
         model.addAttribute("matchType", matchTypeMap);
-        // log.info(model);
+        log.info("matchInfo model = " + model);
 
         return "matchinfo";
     }
